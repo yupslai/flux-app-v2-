@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase/client';
 
 // fal.ai 클라이언트 초기화
 fal.config({
-  credentials: process.env.FAL_KEY,
+  credentials: process.env.FAL_API_KEY as string,
 });
 
 interface GenerateImageOptions {
@@ -25,19 +25,17 @@ export async function generateImage({
     }
 
     // 이미지 생성 요청
-    const result = await fal.subscribe('110602490-fast-sdxl', {
+    const result = await fal.run('fal-ai/fast-sdxl', {
       input: {
         prompt,
-        style,
-        size,
       },
-    });
+    }) as any;
 
-    if (!result || !result.images || result.images.length === 0) {
+    if (!result || !result.data?.images || result.data.images.length === 0) {
       throw new Error('Failed to generate image');
     }
 
-    const imageUrl = result.images[0].url;
+    const imageUrl = result.data.images[0].url;
 
     // 이미지 URL을 Supabase에 저장
     const { data, error } = await supabase
