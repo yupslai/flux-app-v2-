@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
-import { FalClient } from '@fal-ai/serverless-client';
+import { fal } from '@fal-ai/client';
 
 // Initialize OpenAI client
 const openai = new OpenAI({
@@ -8,8 +8,8 @@ const openai = new OpenAI({
 });
 
 // Initialize Fal.ai client
-const falClient = new FalClient({
-  credentials: process.env.FAL_API_KEY,
+fal.config({
+  credentials: process.env.FAL_API_KEY as string,
 });
 
 export async function POST(req: Request) {
@@ -34,26 +34,18 @@ export async function POST(req: Request) {
     const marketingCopy = copyResponse.choices[0].message.content;
 
     // Generate image using Fal.ai
-    const imageResponse = await falClient.subscribe('fal-ai/stable-diffusion', {
+    const imageResponse = await fal.run('fal-ai/fast-sdxl', {
       input: {
         prompt: `Create a professional marketing image for ${template} based on: ${input}`,
         image_size: '1024x1024',
-        num_inference_steps: 50,
       },
-    });
+    }) as any;
 
     let imageUrl = '';
     if (imageResponse.data?.images?.length > 0) {
-      for (const image of imageResponse.data.images) {
-        if (image.url) {
-          if (/^[A-Za-z0-9+/=]{50,}$/.test(image.url)) {
-            console.log('Found base64 in image.url');
-            imageUrl = `data:image/jpeg;base64,${image.url}`;
-          } else {
-            imageUrl = image.url;
-          }
-          break;
-        }
+      const image = imageResponse.data.images[0];
+      if (image.url) {
+        imageUrl = image.url;
       }
     }
 
