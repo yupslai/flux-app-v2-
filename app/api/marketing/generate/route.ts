@@ -37,7 +37,6 @@ export async function POST(req: Request) {
     const imageResponse = await fal.run('fal-ai/fast-sdxl', {
       input: {
         prompt: `Create a professional marketing image for ${template} based on: ${input}`,
-        image_size: '1024x1024',
       },
     }) as any;
 
