@@ -21,14 +21,14 @@ const templateStyles = {
 function getBrandStyle(brand: string): string {
   const brandStyles = {
     adidas:
-      'sporty, dynamic, urban, street style, athletic, modern, bold, energetic, three stripes logo, sportswear, athletic performance',
-    nike: 'athletic, dynamic, premium, innovative, bold, energetic, urban, swoosh logo, sportswear, athletic performance',
-    puma: 'sporty, casual, street style, modern, vibrant, urban, puma logo, sportswear, athletic performance',
+      'sporty, dynamic, urban, street style, athletic, modern, bold, energetic, Adidas three stripes logo, sportswear, athletic performance, no text overlays, clean design, product focus',
+    nike: 'athletic, dynamic, premium, innovative, bold, energetic, urban, Nike swoosh logo, sportswear, athletic performance, no text overlays, clean design, product focus',
+    puma: 'sporty, casual, street style, modern, vibrant, urban, Puma logo, sportswear, athletic performance, no text overlays, clean design, product focus',
     starbucks:
-      'premium coffee shop, warm atmosphere, green and white branding, modern cafe interior, barista, coffee art, cozy seating, professional coffee equipment, siren logo, coffee cups, pastries, coffee beans',
+      'premium coffee shop, warm atmosphere, green and white branding, modern cafe interior, barista, coffee art, cozy seating, professional coffee equipment, Starbucks siren logo, coffee cups, pastries, coffee beans, no text overlays, clean design, product focus',
     aquapick:
-      'A square Instagram-style ad featuring the Aquapick water flosser. The background is a vibrant gradient of clean blue tones with water droplet textures. The sleek white flosser is angled stylishly to the right, spraying a fine mist of water. On the left, bold Korean text reads: 칫솔로 닿지 않는 곳까지 깨끗하게! with smaller text below: 하루 한 번, 아쿠아픽으로 상쾌한 구강 관리 시작하세요. Include the Aquapick logo in the upper-left corner. The design is modern, minimal, and optimized for mobile view — perfect for Instagram and Facebook feed posts, dental care, oral hygiene, water flosser, clean blue gradient, water droplets, healthcare product, fresh, hygienic',
-    default: 'professional, modern, clean, high-quality, premium, elegant',
+      'A square Instagram-style ad featuring the Aquapick water flosser as the main subject. The background is a vibrant gradient of clean blue tones with subtle water droplet textures. The sleek white water flosser device is positioned elegantly in the center, spraying a fine mist of water. Include the Aquapick logo prominently placed in the composition. The design is modern, minimal, and clean without any text overlays. Focus on dental care, oral hygiene, water flosser product, clean blue gradient background, water droplets, healthcare product, fresh, hygienic, professional product photography, minimalist design, no text, text-free',
+    default: 'professional, modern, clean, high-quality, premium, elegant, no text overlays, clean design, product focus',
   };
 
   return brandStyles[brand as keyof typeof brandStyles] || brandStyles.default;
