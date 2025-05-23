@@ -42,7 +42,20 @@ export async function POST(req: Request) {
       },
     });
 
-    const imageUrl = imageResponse.images[0].url;
+    let imageUrl = '';
+    if (imageResponse.data?.images?.length > 0) {
+      for (const image of imageResponse.data.images) {
+        if (image.url) {
+          if (/^[A-Za-z0-9+/=]{50,}$/.test(image.url)) {
+            console.log('Found base64 in image.url');
+            imageUrl = `data:image/jpeg;base64,${image.url}`;
+          } else {
+            imageUrl = image.url;
+          }
+          break;
+        }
+      }
+    }
 
     return NextResponse.json({
       text: marketingCopy,
