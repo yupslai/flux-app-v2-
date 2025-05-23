@@ -1,6 +1,4 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { getToken } from 'next-auth/jwt';
-import { guestRegex, isDevelopmentEnvironment } from './lib/constants';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -13,46 +11,15 @@ export async function middleware(request: NextRequest) {
     return new Response('pong', { status: 200 });
   }
 
-  // 마케팅 페이지에 대해서는 인증 우회
-  if (pathname.startsWith('/marketing') || pathname.startsWith('/api/marketing-prompt') || 
-      pathname.startsWith('/api/generate-image') || pathname.startsWith('/api/speech-to-text')) {
-    return NextResponse.next();
-  }
-
-  if (pathname.startsWith('/api/auth')) {
-    return NextResponse.next();
-  }
-
-  const token = await getToken({
-    req: request,
-    secret: process.env.AUTH_SECRET,
-    secureCookie: !isDevelopmentEnvironment,
-  });
-
-  if (!token) {
-    const redirectUrl = encodeURIComponent(request.url);
-
-    return NextResponse.redirect(
-      new URL(`/api/auth/guest?redirectUrl=${redirectUrl}`, request.url),
-    );
-  }
-
-  const isGuest = guestRegex.test(token?.email ?? '');
-
-  if (token && !isGuest && ['/login', '/register'].includes(pathname)) {
-    return NextResponse.redirect(new URL('/', request.url));
-  }
-
+  // 모든 페이지와 API에 대해 접근 허용
   return NextResponse.next();
 }
 
 export const config = {
   matcher: [
     '/',
-    '/chat/:id',
+    '/marketing/:path*',
     '/api/:path*',
-    '/login',
-    '/register',
 
     /*
      * Match all request paths except for the ones starting with:

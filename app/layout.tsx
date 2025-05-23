@@ -4,7 +4,6 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 
 import './globals.css';
-import { SessionProvider } from 'next-auth/react';
 import Navigation from './components/Navigation';
 
 export const metadata: Metadata = {
@@ -79,12 +78,10 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <Toaster position="top-center" />
-          <SessionProvider>
-            <div className="flex flex-col min-h-screen">
-              <Navigation />
-              <main className="flex-1">{children}</main>
-            </div>
-          </SessionProvider>
+          <div className="flex flex-col min-h-screen">
+            <Navigation />
+            <main className="flex-1">{children}</main>
+          </div>
         </ThemeProvider>
       </body>
     </html>

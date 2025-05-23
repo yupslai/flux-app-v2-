@@ -1,15 +1,10 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
-import { FalClient } from '@fal-ai/serverless-client';
+import { fal } from '@fal-ai/client';
 
 // Initialize OpenAI client
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-});
-
-// Initialize Fal.ai client
-const falClient = new FalClient({
-  credentials: process.env.FAL_API_KEY,
 });
 
 export async function POST(req: Request) {
@@ -34,10 +29,9 @@ export async function POST(req: Request) {
     const marketingCopy = copyResponse.choices[0].message.content;
 
     // Generate image using Fal.ai
-    const imageResponse = await falClient.subscribe('fal-ai/stable-diffusion', {
+    const imageResponse = await fal.subscribe('fal-ai/stable-diffusion', {
       input: {
         prompt: `Create a professional marketing image for ${template} based on: ${input}`,
-        image_size: '1024x1024',
         num_inference_steps: 50,
       },
     });
