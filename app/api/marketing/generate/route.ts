@@ -29,25 +29,17 @@ export async function POST(req: Request) {
     const marketingCopy = copyResponse.choices[0].message.content;
 
     // Generate image using Fal.ai
-    const imageResponse = await fal.subscribe('fal-ai/stable-diffusion', {
+    const imageResponse = await fal.run('fal-ai/fast-sdxl', {
       input: {
         prompt: `Create a professional marketing image for ${template} based on: ${input}`,
-        num_inference_steps: 50,
       },
-    });
+    }) as any;
 
     let imageUrl = '';
     if (imageResponse.data?.images?.length > 0) {
-      for (const image of imageResponse.data.images) {
-        if (image.url) {
-          if (/^[A-Za-z0-9+/=]{50,}$/.test(image.url)) {
-            console.log('Found base64 in image.url');
-            imageUrl = `data:image/jpeg;base64,${image.url}`;
-          } else {
-            imageUrl = image.url;
-          }
-          break;
-        }
+      const image = imageResponse.data.images[0];
+      if (image.url) {
+        imageUrl = image.url;
       }
     }
 
